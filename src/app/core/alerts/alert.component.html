@@ -1,0 +1,2 @@
+﻿<!-- <p-messages [(value)]="messages"></p-messages> -->
+<div *ngIf="message" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">{{message.text}}</div>

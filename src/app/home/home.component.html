@@ -1,0 +1,12 @@
+﻿<div class="col-md-6 col-md-offset-3">
+    <h1>Доброго дня, {{currentUser.firstName}}!</h1>
+    <p>Вы успешно авторизованы</p>
+    <h3>Текущие пользователи:</h3>
+    <ul>
+        <li *ngFor="let user of users">
+            {{user.username}} ({{user.firstName}} {{user.lastName}})
+            - <a (click)="deleteUser(user.id)">Delete</a>
+        </li>
+    </ul>
+    <p><a [routerLink]="['/login']">Logout</a></p>
+</div>
