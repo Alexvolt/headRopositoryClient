@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-
+import {AppMaterialModule} from './app.material.module';
 
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
@@ -27,7 +27,8 @@ import { HomeComponent } from './home/index';
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
-    routing
+    routing,
+    AppMaterialModule
   ],
   providers: [
     AuthGuard,
