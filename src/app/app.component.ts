@@ -23,9 +23,9 @@ export class AppComponent {
   //dark = false;
   //changeDetectionStrategy: string;
   navItems = [
-    {name: 'Home', route: ''},
-    {name: 'login', route: '/login'},
-    {name: 'register', route: '/register'}
+    {name: 'Главная', route: ''},
+    {name: 'Войти', route: '/login'},
+    {name: 'Регистрация', route: '/register'}
   ];
 
   constructor(

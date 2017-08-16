@@ -6,13 +6,14 @@ import { FormsModule } from '@angular/forms';
 import {AppMaterialModule} from './app.material.module';
 
 import { AppComponent } from './app.component';
-import { routing } from './app.routing';
+import { AppConfig } from './app.config';
 import { AuthGuard } from './core/index';
 import { AlertComponent } from './core/index';
 import { AlertService, UserService } from './core/index';
 import { AuthenticationService } from './authentication/index';
 import { LoginComponent,RegisterComponent } from './authentication/index';
 import { HomeComponent } from './home/index';
+import { routing } from './app.routing';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { HomeComponent } from './home/index';
     AppMaterialModule
   ],
   providers: [
+    AppConfig,
     AuthGuard,
     AlertService,
     AuthenticationService,

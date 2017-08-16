@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AlertService } from '../../core/index';
 import { AuthenticationService } from '../authentication.service';
+import { AppConfig } from '../../app.config';
 
 @Component({
     moduleId: module.id,
@@ -10,15 +11,19 @@ import { AuthenticationService } from '../authentication.service';
 })
 
 export class LoginComponent implements OnInit {
-    model: any = {};
+    model: any = {username: "", password: ""};
     loading = false;
     returnUrl: string;
+    ff: AppConfig;
+    usernameMinLength = 5;
+    passwordMinLength = 8;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService) { }
+        private alertService: AlertService,
+        private config: AppConfig) { }
 
     ngOnInit() {
         // reset login status

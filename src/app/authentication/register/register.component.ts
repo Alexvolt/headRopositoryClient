@@ -2,6 +2,7 @@
 import { Router } from '@angular/router';
 
 import { AlertService, UserService } from '../../core';
+import { AppConfig } from '../../app.config';
 
 @Component({
     moduleId: module.id,
@@ -15,7 +16,8 @@ export class RegisterComponent {
     constructor(
         private router: Router,
         private userService: UserService,
-        private alertService: AlertService) { }
+        private alertService: AlertService,
+        private config: AppConfig) { }
 
     register() {
         this.alertService.clearAlert();
