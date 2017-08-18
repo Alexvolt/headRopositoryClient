@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../../core/index';
 import { AuthenticationService } from '../authentication.service';
 import { AppConfig } from '../../app.config';
+//import {MdSnackBar, AriaLivePoliteness} from '@angular/material';//!!!
 
 @Component({
     moduleId: module.id,
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
     ff: AppConfig;
     usernameMinLength = 5;
     passwordMinLength = 8;
+    
 
     constructor(
         private route: ActivatedRoute,
@@ -42,7 +44,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    this.alertService.error(error._body);
+                    this.alertService.error(error);
                     this.loading = false;
                 });
     }

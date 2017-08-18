@@ -3,25 +3,35 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import {AppMaterialModule} from './app.material.module';
+import { AppMaterialModule } from './material/app.material.module';
 
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
-import { AuthGuard } from './core/index';
-import { AlertComponent } from './core/index';
-import { AlertService, UserService } from './core/index';
-import { AuthenticationService } from './authentication/index';
-import { LoginComponent,RegisterComponent } from './authentication/index';
+import { 
+  AuthGuard,
+//  AlertComponent,
+  AlertService, 
+  UserService
+  } from './core/index';
+import { 
+  AuthenticationService, 
+  LoginComponent, 
+  RegisterComponent } from './authentication/index';
 import { HomeComponent } from './home/index';
+import { NavItemsService } from './main-form/nav-items.service';
 import { routing } from './app.routing';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { ProfileComponent } from './account/profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AlertComponent,
+//    AlertComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AdminPanelComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +46,7 @@ import { routing } from './app.routing';
     AuthGuard,
     AlertService,
     AuthenticationService,
+    NavItemsService,
     UserService
   ],
   bootstrap: [AppComponent]

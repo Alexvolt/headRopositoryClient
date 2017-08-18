@@ -1,12 +1,15 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map'
 
 import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthenticationService {
+    private subject = new Subject<any>();
+
     constructor(private http: Http) { }
 
     login(username: string, password: string) {
@@ -17,6 +20,7 @@ export class AuthenticationService {
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.subject.next({ loggedIn: true });
                 }
             });
     }
@@ -24,5 +28,11 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+        this.subject.next({ loggedIn: false });
     }
+
+    getMessage(): Observable<any> {
+        return this.subject.asObservable();
+    }
+    
 }

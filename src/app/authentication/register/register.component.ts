@@ -30,7 +30,7 @@ export class RegisterComponent {
                 },
                 error => {
                     console.log(error);
-                    this.alertService.error(error._body);
+                    this.alertService.error(error);
                     this.loading = false;
                 });
     }
