@@ -1,0 +1,8 @@
+.server-scrolling-table {
+  height: calc(100vh - 110px);
+}
+
+/* .server-scrolling-table .progress-linear {
+  position: fixed !important;
+  bottom: 0px;
+} */

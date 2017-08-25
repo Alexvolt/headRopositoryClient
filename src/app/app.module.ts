@@ -3,7 +3,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+
 import { AppMaterialModule } from './material/app.material.module';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
 
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
@@ -39,7 +42,8 @@ import { ProfileComponent } from './account/profile/profile.component';
     FormsModule,
     HttpModule,
     routing,
-    AppMaterialModule
+    AppMaterialModule,
+    NgxDatatableModule,
   ],
   providers: [
     AppConfig,

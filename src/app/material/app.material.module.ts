@@ -33,7 +33,8 @@ import {
   MdTooltipModule,
   StyleModule
 } from '@angular/material';
-//import {CdkTableModule} from '@angular/cdk/table';
+//import {CdkTableModule} from '@angular/cdk';
+
 
 /**
  * NgModule that includes all Material modules that are required to serve the demo-app.

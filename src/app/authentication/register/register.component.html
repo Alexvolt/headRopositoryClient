@@ -8,7 +8,12 @@
         </div>
         <div>
             <md-input-container class="default-input-field">
-                <input mdInput placeholder="Имя" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required>
+                <input mdInput placeholder="Фамилия" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required>
+            </md-input-container>
+        </div>
+        <div>
+            <md-input-container class="default-input-field">
+                <input mdInput type="email" placeholder="e-mail" name="email" [(ngModel)]="model.email" #email="ngModel" required>
             </md-input-container>
         </div>
         <div>
