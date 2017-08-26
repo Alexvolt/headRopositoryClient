@@ -1,2 +1,2 @@
-﻿export * from './alert.component';
-export * from './alert.service';
+﻿export { AlertComponent } from './alert.component';
+export { AlertService } from './alert.service';

@@ -17,8 +17,8 @@ export class NavItemsService {
     private authService: AuthenticationService,
     private credentialsService: CredentialsService
   ) {
-    this.fillNavItems();
     this.authService.getMessage().subscribe(message => { this.fillNavItems(); });
+    //this.fillNavItems();
   }
 
   fillNavItems() {

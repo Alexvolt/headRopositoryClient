@@ -19,7 +19,8 @@ import {
   ProfileComponent,
   CredentialsService,
   LoginComponent, 
-  RegisterComponent } from './core';
+  RegisterComponent 
+} from './core/index';
 import { HomeComponent } from './home/index';
 import { NavItemsService } from './main-form/nav-items.service';
 import { routing } from './app.routing';
@@ -27,7 +28,6 @@ import { routing } from './app.routing';
 @NgModule({
   declarations: [
     AppComponent,
-//    AlertComponent,
     HomeComponent,
     LoginComponent,
     RegisterComponent,

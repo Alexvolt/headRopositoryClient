@@ -17,11 +17,11 @@ import { NavItemsService } from './main-form/nav-items.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
-  navItems = [
-    {name: 'Главная', route: ''},
-    {name: 'Войти', route: '/login'},
-    {name: 'Регистрация', route: '/register'}
-  ];
+  // navItems = [
+  //   {name: 'Главная', route: ''},
+  //   {name: 'Войти', route: '/login'},
+  //   {name: 'Регистрация', route: '/register'}
+  // ];
 
   constructor(public navItemsService: NavItemsService) {
     //navItemsService.fillNavItems();
