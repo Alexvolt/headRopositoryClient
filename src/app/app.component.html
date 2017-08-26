@@ -5,7 +5,7 @@
         <md-icon class="md-24">close</md-icon> 
       </a>
       <hr>
-      <a *ngFor="let navItem of navItemsService.navItemsMain"
+      <a *ngFor="let navItem of navItemsMain"
          md-list-item
          (click)="start.close()"
          routerLinkActive
@@ -14,8 +14,8 @@
          [routerLink]="[navItem.route]">
         {{navItem.name}}
       </a>
-      <hr>
-      <a *ngFor="let navItem of navItemsService.navItemsAuth"
+      <hr>     
+      <a *ngFor="let navItem of navItemsAuth"
          md-list-item
          (click)="start.close()"
          routerLinkActive

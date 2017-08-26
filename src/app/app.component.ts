@@ -4,6 +4,8 @@ import {
 } from '@angular/core';
 
 import { NavItemsService } from './main-form/nav-items.service';
+import { AlertService } from './core/index';
+import 'rxjs/add/operator/delay';
 
 
 /**
@@ -17,14 +19,21 @@ import { NavItemsService } from './main-form/nav-items.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
-  // navItems = [
-  //   {name: 'Главная', route: ''},
-  //   {name: 'Войти', route: '/login'},
-  //   {name: 'Регистрация', route: '/register'}
-  // ];
+  navItemsMain = [
+    {name: 'Главная', route: ''},
+  ];
+  navItemsAuth = [];
 
-  constructor(public navItemsService: NavItemsService) {
-    //navItemsService.fillNavItems();
+  constructor(
+    private navItemsService: NavItemsService,
+    private alertService: AlertService
+  ) {
+    this.navItemsAuth = navItemsService.getNavItems();
+    // delay need because of error in angular: it does not make any problems for app, but error is error
+    navItemsService.getMessage().delay(500).subscribe(
+      navItems => {this.navItemsAuth = navItems;},
+      error => { this.alertService.error(error); }
+    )
   }
 
 }
