@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 import { AuthenticationService, CredentialsService } from '../core/authentication/index';
+import { AlertService } from '../core';
 
 
 @Injectable()
@@ -11,11 +12,12 @@ export class NavItemsService {
   
   constructor(
     private authService: AuthenticationService,
-    private credentialsService: CredentialsService
+    private credentialsService: CredentialsService,
+    private alertService: AlertService
   ) {
     this.authService.getMessage().subscribe(
-      message => { this.fillNavItems(); }//,
-      //error => { this.alertService.error(error); }
+      message => { this.fillNavItems(); },
+      error => { this.alertService.error(error); }
     );
   }
 
