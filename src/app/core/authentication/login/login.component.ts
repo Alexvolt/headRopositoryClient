@@ -1,10 +1,9 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AlertService } from '../../core/index';
+import { AlertService } from '../../index';
 import { AuthenticationService } from '../authentication.service';
-import { AppConfig } from '../../app.config';
-//import {MdSnackBar, AriaLivePoliteness} from '@angular/material';//!!!
+import { AppConfig } from '../../../app.config';
 
 @Component({
     moduleId: module.id,

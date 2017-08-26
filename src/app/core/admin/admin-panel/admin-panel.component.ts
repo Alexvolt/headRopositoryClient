@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router }            from '@angular/router';
 
-import { AlertService, UserService } from '../../core/index';
-import { User } from '../../core/index';
+import { AlertService, UserService } from '../../index';
+import { User } from '../../index';
 
 @Component({
   selector: 'app-admin-panel',
@@ -27,6 +27,7 @@ export class AdminPanelComponent implements OnInit {
   readonly pageLimit = 50;
   isLoading: boolean;
   isSorting: boolean = false;
+  sort: any;
 
   constructor(
     private userServise: UserService,
@@ -40,15 +41,15 @@ export class AdminPanelComponent implements OnInit {
    }
 
   onSort(event){
-    // server-side sorting - need to clear data
-    const sort = event.sorts[0];
     let limit = this.users.length;
+    // server-side sorting - need to clear data
+    this.sort = event.sorts[0];
     //this.users = [];
     this.isSorting = true;
-    this.loadPage(limit, sort);
+    this.loadPage(limit);
   }
 
-  onScroll(offsetY: number, sort?: any){
+  onScroll(offsetY: number){
     // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
 
@@ -68,18 +69,21 @@ export class AdminPanelComponent implements OnInit {
         // (otherwise, we won't be able to scroll past it)
         limit = Math.max(pageSize, this.pageLimit);
       }
-      this.loadPage(limit, sort);
+      this.loadPage(limit);
     }
   }
 
-  private loadPage(limit: number, sort?: any){
+  private loadPage(limit: number){
     // set the loading flag, which serves two purposes:
     // 1) it prevents the same page from being loaded twice
     // 2) it enables display of the loading indicator
     this.isLoading = true;
-    let params = {offset: this.users.length, limit: limit};
-    if(sort){
-      params['orderBy' + (sort.dir === 'desc'?'Desc':'')] = sort.prop;
+    let params = {
+      offset: this.isSorting? 0 : this.users.length,
+      limit: limit
+    };
+    if(this.sort){
+      params['orderBy' + (this.sort.dir === 'desc'?'Desc':'')] = this.sort.prop;
     }
     this.userServise.getAll(params).subscribe(
       users => {

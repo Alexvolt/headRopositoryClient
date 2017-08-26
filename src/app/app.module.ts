@@ -11,20 +11,18 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
 import { 
-  AuthGuard,
-//  AlertComponent,
+  AdminPanelComponent,
   AlertService, 
-  UserService
-  } from './core/index';
-import { 
-  AuthenticationService, 
+  AuthGuard,
+  AuthenticationService,
+  UserService,
+  ProfileComponent,
+  CredentialsService,
   LoginComponent, 
-  RegisterComponent } from './authentication/index';
+  RegisterComponent } from './core';
 import { HomeComponent } from './home/index';
 import { NavItemsService } from './main-form/nav-items.service';
 import { routing } from './app.routing';
-import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
-import { ProfileComponent } from './account/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +48,7 @@ import { ProfileComponent } from './account/profile/profile.component';
     AuthGuard,
     AlertService,
     AuthenticationService,
+    CredentialsService,
     NavItemsService,
     UserService
   ],

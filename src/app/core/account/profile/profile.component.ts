@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AlertService, UserService } from '../../core';
-import { AppConfig } from '../../app.config';
+import { AlertService, UserService } from '../../index';
+import { AppConfig } from '../../../app.config';
 
 @Component({
   selector: 'app-profile',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AuthenticationService } from '../authentication/index';
+import { AuthenticationService, CredentialsService } from '../core/authentication/index';
 
 
 @Injectable()
@@ -13,18 +13,17 @@ export class NavItemsService {
   navItemsAuth = [
   ];
 
-  constructor(private authService: AuthenticationService) {
+  constructor(
+    private authService: AuthenticationService,
+    private credentialsService: CredentialsService
+  ) {
     this.fillNavItems();
-    this.authService.getMessage().subscribe(message => { this.fillNavItemsAuth(message.loggedIn); });
+    this.authService.getMessage().subscribe(message => { this.fillNavItems(); });
   }
 
   fillNavItems() {
-    let user = localStorage.getItem('currentUser');
-    let loggedIn = this.loggedIn();
-    this.fillNavItemsAuth(loggedIn);
-  }
-
-  fillNavItemsAuth(loggedIn: boolean) {
+    let loggedIn = this.credentialsService.loggedIn();
+    let isAdmin  = this.credentialsService.isAdmin();
     if (loggedIn)
       this.navItemsAuth = [
         {name: 'Выйти', route: '/login'},
@@ -38,11 +37,4 @@ export class NavItemsService {
       ];
   }
 
-  loggedIn(): boolean {
-    if (localStorage.getItem('currentUser')) {
-      // logged in so return true
-      return true;
-    }
-    return false;
-  }
 }

@@ -4,10 +4,14 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { User } from '../core/index';
+import {CredentialsService} from './authentication/credentials.service'
+
 
 @Injectable()
 export class UserService{
-    constructor(private http: Http) { 
+    constructor(
+        private http: Http,
+        private credentialsService: CredentialsService) { 
     }
 
     getAll(params?: any) {
@@ -44,7 +48,7 @@ export class UserService{
 
     private jwt() {
         // create authorization header with jwt token
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let currentUser = this.credentialsService.userData;
         if (currentUser && currentUser.token) {
             let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
             return new RequestOptions({ headers: headers });

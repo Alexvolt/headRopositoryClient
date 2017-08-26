@@ -4,13 +4,17 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map'
 
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
+import { CredentialsService } from './credentials.service';
 
 @Injectable()
 export class AuthenticationService {
     private subject = new Subject<any>();
 
-    constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        private credentialsService: CredentialsService
+    ) { }
 
     login(username: string, password: string) {
         return this.http.post(environment.apiUrl + '/users/authenticate', { username: username, password: password })
@@ -19,7 +23,7 @@ export class AuthenticationService {
                 let user = response.json();
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.credentialsService.userData = user;
                     this.subject.next({ loggedIn: true });
                 }
             });
@@ -27,12 +31,12 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
+        this.credentialsService.remove();        
         this.subject.next({ loggedIn: false });
     }
 
     getMessage(): Observable<any> {
         return this.subject.asObservable();
     }
-    
+
 }

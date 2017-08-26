@@ -2,6 +2,7 @@
 
 import { User } from '../core/index';
 import { AlertService, UserService } from '../core/index';
+import { CredentialsService } from '../core/authentication/credentials.service'
 
 @Component({
     moduleId: module.id,
@@ -14,8 +15,10 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private userService: UserService,
-        private alertService: AlertService) {
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        private alertService: AlertService,
+        private credentialsService: CredentialsService
+    ) {
+        this.currentUser = credentialsService.userData;
     }
 
     ngOnInit() {

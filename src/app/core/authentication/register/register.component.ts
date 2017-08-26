@@ -1,8 +1,8 @@
 ﻿import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AlertService, UserService } from '../../core';
-import { AppConfig } from '../../app.config';
+import { AlertService, UserService } from '../../index';
+import { AppConfig } from '../../../app.config';
 
 @Component({
     moduleId: module.id,
