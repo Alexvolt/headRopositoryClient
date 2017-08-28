@@ -1,3 +1,7 @@
+<div *ngIf="is404">
+    <h1>Мы сделали все что могли, но данных нет</h1>
+</div>
+<div *ngIf="model">
 <md-tab-group>
   <md-tab label="Профиль">
     <div class="child-form">
@@ -48,3 +52,4 @@
     </div>
   </md-tab>
 </md-tab-group>
+</div>

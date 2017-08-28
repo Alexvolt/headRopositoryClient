@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { User } from '../core/index';
-import {CredentialsService} from './authentication/credentials.service'
+import { CredentialsService } from './authentication/credentials.service'
 
 
 @Injectable()
@@ -28,8 +28,12 @@ export class UserService{
         return this.http.get(environment.apiUrl + '/users' + eddUrl, this.jwt()).map((response: Response) => response.json());
     }
 
-    getById(id: string) {
+    getById(id: number) {
         return this.http.get(environment.apiUrl + '/users/' + id, this.jwt()).map((response: Response) => response.json());
+    }
+
+    current() {
+        return this.http.get(environment.apiUrl + '/users/current', this.jwt()).map((response: Response) => response.json());
     }
 
     create(user: User) {
