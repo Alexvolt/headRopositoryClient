@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap }   from '@angular/router';
+import { ActivatedRoute, Router, ParamMap }   from '@angular/router';
+import { Location }                 from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 
 import { AlertService, UserService, User } from '../../index';
@@ -11,35 +12,51 @@ import { AppConfig } from '../../../app.config';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-    model: User;
-    loading = false;
-    is404 = false;
-
-    constructor(
-        private route: ActivatedRoute,
-        private userService: UserService,
-        private alertService: AlertService,
-        private config: AppConfig) { }
+  model: User;
+  loading = false;
+  is404 = false;
+  private goBackAfterSaving = false;
+  private returnUrl: string;
   
-    ngOnInit() {
-        this.route.paramMap
-            .switchMap((params: ParamMap) => {
-                let paramVal = params.get('id');
-                if (paramVal == null)
-                    return this.userService.current();
-                else    
-                    return this.userService.getById(+paramVal);
-            })
-            .subscribe(
-                user => this.model = user,
-                error => 
-                {
-                    if(error.status = 404)
-                        this.is404 = true;
-                    else    
-                        this.alertService.error(error);
-                }
-            );
-    }
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private userService: UserService,
+    private alertService: AlertService,
+    private config: AppConfig) { }
+  
+  ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+    this.route.paramMap
+      .switchMap((params: ParamMap) => {
+        let paramVal = params.get('id');
+        if (paramVal == null) 
+          return this.userService.current();
+        else {   
+          this.goBackAfterSaving = true;
+          return this.userService.getById(+paramVal);
+        }
+      })
+      .subscribe(
+        user => this.model = user,
+        error => {
+          if(error.status = 404)
+            this.is404 = true;
+          else    
+            this.alertService.error(error);
+        }
+      );
+  }
+
+  save(){
+    this.userService.update(this.model).subscribe(
+        () => {if (this.goBackAfterSaving) this.goBack()},
+        error => this.alertService.error(error));  
+  }
+
+  goBack(){
+    this.location.back();
+  }
 
 }

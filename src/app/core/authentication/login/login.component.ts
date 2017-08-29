@@ -14,7 +14,6 @@ export class LoginComponent implements OnInit {
     model: any = {username: "", password: ""};
     loading = false;
     returnUrl: string;
-    ff: AppConfig;
     usernameMinLength = 5;
     passwordMinLength = 8;
     
