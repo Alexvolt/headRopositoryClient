@@ -16,7 +16,6 @@ export class ProfileComponent implements OnInit {
   loading = false;
   is404 = false;
   private goBackAfterSaving = false;
-  private returnUrl: string;
   
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +25,6 @@ export class ProfileComponent implements OnInit {
     private config: AppConfig) { }
   
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     this.route.paramMap
       .switchMap((params: ParamMap) => {
@@ -51,7 +49,12 @@ export class ProfileComponent implements OnInit {
 
   save(){
     this.userService.update(this.model).subscribe(
-        () => {if (this.goBackAfterSaving) this.goBack()},
+        () => {
+            if (this.goBackAfterSaving) 
+                this.goBack();
+            else
+                this.alertService.success('Данные успешно обновлены')
+        },
         error => this.alertService.error(error));  
   }
 
