@@ -38,6 +38,13 @@ export class CredentialsService{
         return false;
     }
 
+    currentUserName() {
+        let userData = this.userData;
+        if(userData)
+            return userData.username;
+        return '';
+    }
+
     remove(){
         localStorage.removeItem('currentUser');    
         this._userData = undefined;    

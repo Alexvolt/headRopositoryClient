@@ -4,6 +4,7 @@ import { Location }                 from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 
 import { AlertService, UserService, User } from '../../index';
+import { CredentialsService } from '../../authentication/credentials.service';
 import { AppConfig } from '../../../app.config';
 
 @Component({
@@ -15,6 +16,7 @@ export class ProfileComponent implements OnInit {
   model: User;
   loading = false;
   is404 = false;
+  isAdmin = false;
   private goBackAfterSaving = false;
   
   constructor(
@@ -22,9 +24,11 @@ export class ProfileComponent implements OnInit {
     private location: Location,
     private userService: UserService,
     private alertService: AlertService,
+    private credentialsService: CredentialsService,
     private config: AppConfig) { }
   
   ngOnInit() {
+    this.isAdmin = this.credentialsService.isAdmin();
 
     this.route.paramMap
       .switchMap((params: ParamMap) => {

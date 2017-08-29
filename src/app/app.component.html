@@ -32,9 +32,20 @@
       <button md-icon-button (click)="start.open()">
         <md-icon class="md-24">menu</md-icon>
       </button>
+      <h1>Bounty Hunter corner</h1>
+      <span class="toolbar-spacer"></span>
+      <a *ngIf="loggedIn" md-button [routerLink]="['/profile']">{{currentUserName}}</a>
+      <a *ngIf="!loggedIn" md-button [routerLink]="['/login']">Войти</a>
+      <a *ngIf="!loggedIn" md-button [routerLink]="['/register']">Регистрация</a>
       <div class="app-toolbar">
+        
+        <!-- <div>
         <h1>Bounty Hunter corner</h1>
-        <div>
+          <a *ngIf="loggedIn" md-button [routerLink]="['/profile']">{{currentUserName}}</a>
+          <a *ngIf="!loggedIn" md-button [routerLink]="['/login']">Войти</a>
+          <a *ngIf="!loggedIn" md-button [routerLink]="['/register']">Регистрация</a>
+        </div>
+        <div> -->
 <!--           <button md-button (click)="toggleChangeDetection()" title="Toggle change detection">
             Change detection: {{changeDetectionStrategy}}
           </button>
@@ -45,7 +56,6 @@
  --><!--           <button md-button (click)="root.dir = (root.dir == 'rtl' ? 'ltr' : 'rtl')" title="Toggle between RTL and LTR">
             {{root.dir.toUpperCase()}}
           </button>-->
-         </div>
       </div>
     </md-toolbar>
       <router-outlet></router-outlet>

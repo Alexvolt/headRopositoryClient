@@ -1,49 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
 
 import { AuthenticationService, CredentialsService } from '../core/authentication/index';
-import { AlertService } from '../core';
 
 
 @Injectable()
 export class NavItemsService {
-  private subject = new Subject<any>();
-  
   constructor(
-    private authService: AuthenticationService,
-    private credentialsService: CredentialsService,
-    private alertService: AlertService
-  ) {
-    this.authService.getMessage().subscribe(
-      message => { this.fillNavItems(); },
-      error => { this.alertService.error(error); }
-    );
-  }
+    private credentialsService: CredentialsService) {}
 
   getNavItems() {
     let loggedIn = this.credentialsService.loggedIn();
     let isAdmin  = this.credentialsService.isAdmin();
     let navItemsAuth = [];
     if (loggedIn)
-      return [
+      navItemsAuth = [
         {name: 'Выйти', route: '/login'},
         {name: 'Профиль', route: '/profile'},
         {name: 'Администрирование', route: '/admin'},
      ];
     else
-      return [
+      navItemsAuth = [
         {name: 'Войти', route: '/login'},
         {name: 'Регистрация', route: '/register'}
       ];
-  }
-  
-  fillNavItems() {
-    this.subject.next(this.getNavItems());
-  }
-  
-  getMessage(): Observable<any> {
-    return this.subject.asObservable();
+
+    return {
+      navItemsAuth: navItemsAuth,
+      loggedIn: loggedIn,
+      isAdmin: isAdmin,
+      currentUserName: this.credentialsService.currentUserName(),
+    }
   }
 
 }

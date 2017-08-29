@@ -2,10 +2,10 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
+import 'rxjs/add/operator/delay';
 
 import { NavItemsService } from './main-form/nav-items.service';
-import { AlertService } from './core/index';
-import 'rxjs/add/operator/delay';
+import { AuthenticationService, AlertService } from './core/index';
 
 
 /**
@@ -17,23 +17,37 @@ import 'rxjs/add/operator/delay';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   encapsulation: ViewEncapsulation.None,
+  providers: [NavItemsService]
 })
 export class AppComponent {
   navItemsMain = [
     {name: 'Главная', route: ''},
   ];
   navItemsAuth = [];
+  isAdmin = false;
+  loggedIn = false;
+  currentUserName = '';
 
   constructor(
+    private authService: AuthenticationService,
     private navItemsService: NavItemsService,
     private alertService: AlertService
   ) {
-    this.navItemsAuth = navItemsService.getNavItems();
+    this.updatePage();
+
     // delay need because of error in angular: it does not make any problems for app, but error is error
-    navItemsService.getMessage().delay(500).subscribe(
-      navItems => {this.navItemsAuth = navItems;},
+    this.authService.getMessage().delay(100).subscribe(
+      message => this.updatePage(),
       error => { this.alertService.error(error); }
-    )
+    );
+  }
+
+  updatePage() {
+    let navSettings = this.navItemsService.getNavItems();
+    this.navItemsAuth = navSettings.navItemsAuth; 
+    this.loggedIn = navSettings.loggedIn; 
+    this.isAdmin = navSettings.isAdmin; 
+    this.currentUserName = navSettings.currentUserName; 
   }
 
 }
