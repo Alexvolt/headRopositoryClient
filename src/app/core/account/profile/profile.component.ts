@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
             if (this.goBackAfterSaving) 
                 this.goBack();
             else
-                this.alertService.success('Данные успешно обновлены!')
+                this.alertService.success('Данные успешно обновлены')
         },
         error => this.alertService.error(error));  
   }
