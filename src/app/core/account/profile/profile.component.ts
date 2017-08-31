@@ -17,6 +17,7 @@ export class ProfileComponent implements OnInit {
   loading = false;
   is404 = false;
   isAdmin = false;
+  readOnly = true;
   private goBackAfterSaving = false;
   
   constructor(
@@ -29,12 +30,17 @@ export class ProfileComponent implements OnInit {
   
   ngOnInit() {
     this.isAdmin = this.credentialsService.isAdmin();
+    if (this.isAdmin)
+        this.readOnly = false;
 
     this.route.paramMap
       .switchMap((params: ParamMap) => {
         let paramVal = params.get('id');
-        if (paramVal == null) 
+
+        if (paramVal == null) {
+          this.readOnly = false; 
           return this.userService.current();
+        }
         else {   
           this.goBackAfterSaving = true;
           return this.userService.getById(+paramVal);

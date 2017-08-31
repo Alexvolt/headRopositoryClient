@@ -16,6 +16,13 @@ export class CredentialsService{
         this._userData = userWithToken; 
         localStorage.setItem('currentUser', JSON.stringify(userWithToken)); }
 
+    get currentUserId(): number {
+        let userData = this.userData;
+        if(userData)
+            return userData.id;
+        return -1;
+    }
+        
     constructor() { 
     }
 

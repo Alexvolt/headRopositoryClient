@@ -4,27 +4,27 @@
 <div *ngIf="model">
 <md-tab-group>
   <md-tab label="Профиль">
-    <div class="child-form">
-        <form  name="form" (ngSubmit)="f.form.valid && save()" #f="ngForm" novalidate>
-            <h3>Изменение данных профиля</h3>
+    <div  class="child-form">
+        <form  name="form" (ngSubmit)="f.form.valid && save()" #f="ngForm"  novalidate>
+            <h3  *ngIf="!readOnly" >Изменение данных профиля</h3>
             <div>
                 <md-input-container class="default-input-field">
-                    <input mdInput placeholder="Имя" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required>
+                    <input mdInput placeholder="Имя" name="firstName" [disabled]="readOnly" [(ngModel)]="model.firstName" #firstName="ngModel" required>
                 </md-input-container>
             </div>
             <div>
                 <md-input-container class="default-input-field">
-                    <input mdInput placeholder="Фамилия" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required>
+                    <input mdInput placeholder="Фамилия" name="lastName" [disabled]="readOnly" [(ngModel)]="model.lastName" #lastName="ngModel" required>
                 </md-input-container>
             </div>
             <div>
                 <md-input-container class="default-input-field">
-                    <input mdInput type="email" placeholder="e-mail" name="email" [(ngModel)]="model.email" #email="ngModel" required>
+                    <input mdInput type="email" placeholder="e-mail" name="email" [disabled]="readOnly" [(ngModel)]="model.email" #email="ngModel" required>
                 </md-input-container>
             </div>
             <div>
                 <md-input-container class="default-input-field">
-                    <input mdInput [minlength]="config.usernameMinLength" placeholder="Логин" name="username" [(ngModel)]="model.username" #username="ngModel" required>
+                    <input mdInput [minlength]="config.usernameMinLength" placeholder="Логин" name="username" [disabled]="readOnly" [(ngModel)]="model.username" #username="ngModel" required>
                     <md-hint align="start" *ngIf="username.value && username.value.length < config.usernameMinLength">{{username.value.length}} символов / минимум {{config.usernameMinLength}}</md-hint>  
                 </md-input-container>
             </div>
@@ -44,7 +44,7 @@
                 Разрешен доступ
             </md-slide-toggle>
             </div>
-            <div class="form-group">
+            <div *ngIf="!readOnly" class="form-group">
                 <button md-fab [disabled]="loading"><md-icon>check</md-icon></button>
                 <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                 <button type="button" md-fab [disabled]="loading" (click)="goBack()"><md-icon>close</md-icon></button>
@@ -52,7 +52,7 @@
         </form>
     </div>
   </md-tab>
-  <md-tab label="Смена пароля">
+  <md-tab *ngIf="!readOnly" label="Смена пароля">
     <div>
       <h3>Введите старый/новый пароль</h3>
       <md-input-container class="default-input-field">
