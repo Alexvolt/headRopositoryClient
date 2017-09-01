@@ -49,7 +49,6 @@ export class UserService{
     }
 
     // private helper methods
-
     private jwt() {
         // create authorization header with jwt token
         let currentUser = this.credentialsService.userData;

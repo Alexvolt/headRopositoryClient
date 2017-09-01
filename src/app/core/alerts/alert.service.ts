@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { Router, RouterStateSnapshot, NavigationStart } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MdSnackBar, MdSnackBarConfig } from '@angular/material';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 
@@ -48,7 +48,7 @@ export class AlertService {
 
   error(message: any, keepAfterNavigationChange = false, ) {
     this.snackBar.open(this.getErrorMessageFromObject(message), 'Закрыть', {
-      duration: 15000,
+      duration: 95000, extraClasses: ['error-message']
     });
 
     //this.keepAfterNavigationChange = keepAfterNavigationChange;
