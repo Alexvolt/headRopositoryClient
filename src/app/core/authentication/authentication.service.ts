@@ -21,7 +21,7 @@ export class AuthenticationService {
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
-                if (user && user.token) {
+                if (user && user.tokenAuth) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     this.credentialsService.userData = user;
                     this.subject.next({ loggedIn: true });

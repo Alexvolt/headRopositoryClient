@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import {JwtHelper} from './jwt.helper';
+import { AlertService } from "../alerts/alert.service";
 
 
 @Injectable()
@@ -23,7 +24,7 @@ export class CredentialsService{
         return -1;
     }
         
-    constructor() { 
+    constructor(private alertService: AlertService) { 
     }
 
     loggedIn(){
@@ -39,9 +40,15 @@ export class CredentialsService{
             return false;
 
         let jwtHelper = new JwtHelper();
-        let decodedToken = jwtHelper.decodeToken(userData.token);
-        if(decodedToken.admin)
-            return true;
+        try {
+            let decodedToken = jwtHelper.decodeToken(userData.tokenAccess);    
+            if(decodedToken.admin)
+                return true;
+        } catch (error) {
+            this.alertService.error(error);
+            this.remove();
+        }
+        
         return false;
     }
 

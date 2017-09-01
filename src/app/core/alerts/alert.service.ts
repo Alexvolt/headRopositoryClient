@@ -48,7 +48,7 @@ export class AlertService {
 
   error(message: any, keepAfterNavigationChange = false, ) {
     this.snackBar.open(this.getErrorMessageFromObject(message), 'Закрыть', {
-      duration: 95000, extraClasses: ['error-message']
+      duration: 15000, extraClasses: ['error-message']
     });
 
     //this.keepAfterNavigationChange = keepAfterNavigationChange;

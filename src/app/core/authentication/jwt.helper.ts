@@ -13,6 +13,9 @@ export class JwtHelper {
   }
 
   public decodeToken(token: string) {
+    if (!token) {
+      throw new Error('Token is empty');
+    }
     var parts = token.split('.');
     if (parts.length !== 3) {
       throw new Error('JWT must have 3 parts');

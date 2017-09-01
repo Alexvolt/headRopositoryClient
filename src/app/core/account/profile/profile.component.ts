@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(
         user => this.model = user,
         error => {
-          if(error.status = 404)
+          if(error.status == 404)
             this.is404 = true;
           else    
             this.alertService.error(error);

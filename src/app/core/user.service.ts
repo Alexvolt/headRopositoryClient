@@ -52,8 +52,8 @@ export class UserService{
     private jwt() {
         // create authorization header with jwt token
         let currentUser = this.credentialsService.userData;
-        if (currentUser && currentUser.token) {
-            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+        if (currentUser && currentUser.tokenAccess) {
+            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.tokenAccess });
             return new RequestOptions({ headers: headers });
         }
     }
