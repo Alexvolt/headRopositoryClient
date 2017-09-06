@@ -1,15 +1,110 @@
 
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, RequestOptions, RequestMethod, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { CredentialsService } from './authentication/credentials.service'
+import { environment } from '../../environments/environment';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class HttpService {
+
+  activeRequestCount:number = 0;
+
   constructor(
     private router: Router,
     private http: Http,
+    private credentialsService: CredentialsService
   ) {}
+
+  get(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
+    options = this.getOptions(RequestMethod.Get, options);
+    return this.httpRequest(url, options, false);
+  }
+
+  post(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
+    options = this.getOptions(RequestMethod.Post, options);
+    return this.httpRequest(url, options, false);
+  }
+
+  put(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
+    options = this.getOptions(RequestMethod.Put, options);
+    return this.httpRequest(url, options, false);
+  }
+
+  delete(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
+    options = this.getOptions(RequestMethod.Delete, options);
+    return this.httpRequest(url, options, false);
+  }
+
+  private getOptions(method: RequestMethod, options?: RequestOptionsArgs): RequestOptionsArgs{
+    if(!options){
+      options = { method: method };
+    }
+    if(options.method != method)
+      options.method = method;
+    return options;
+  }
+
+  private httpRequest(url: string, options: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
+    if (!isRetry) 
+      this.activeRequestCount++;
+    
+    options.headers = this.getHeaders();
+    return this.http.request(url, options)
+      .map(response => {
+        return this.extractData(response);
+      })
+      .catch(error => {
+        if (!isRetry && error.status == 401) 
+          // try recieve a new token; if yes - repeat a request
+          return this.http.post(environment.apiUrl + '/users/accessToken', { tokenAuth: this.credentialsService.userData.tokenAuth })
+            .switchMap((response: Response) => {
+              // update token
+              let tokenAccess = response.json().tokenAccess
+              console.log(`update token`);//console.log(`update token: ${tokenAccess}`);
+              this.credentialsService.setAccessToken(tokenAccess);
+              // repeat an original request
+              return this.httpRequest(url, options, true);
+            })
+            .catch(error => {
+              if(error.status == 401) {
+                // cant to recive new AccessToken. Need to logout - and then need to login again
+                this.router.navigate(['/login']);
+              }
+              return Observable.throw(error);  
+            })
+        else 
+          return Observable.throw(error);  
+        
+      })
+      .finally(() => {this.activeRequestCount--;});
+  }
+
+
+  private getHeaders() {
+    let currentUser = this.credentialsService.userData;
+      if (currentUser && currentUser.tokenAccess) {
+          return  new Headers({ 'Authorization': 'Bearer ' + currentUser.tokenAccess });
+      }
+    return null;
+  }
+
+  private extractData(res: Response) {
+    let body;
+    if (res.text()) 
+      try {
+          body = res.json();;
+      }
+      catch(err){};
+      
+    return body || {};//empty object if put or delete
+  }
+
 }
 /*
 

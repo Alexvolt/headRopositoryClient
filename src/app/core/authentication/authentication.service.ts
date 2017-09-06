@@ -1,26 +1,27 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map'
 
 import { environment } from '../../../environments/environment';
 import { CredentialsService } from './credentials.service';
+import { HttpService } from "../http.service";
 
 @Injectable()
 export class AuthenticationService {
     private subject = new Subject<any>();
 
     constructor(
-        private http: Http,
+        private http: HttpService,
         private credentialsService: CredentialsService
     ) { }
 
     login(username: string, password: string) {
-        return this.http.post(environment.apiUrl + '/users/authenticate', { username: username, password: password })
-            .map((response: Response) => {
+        let requestOptions = {body: { username: username, password: password }};
+        return this.http.post(environment.apiUrl + '/users/authenticate', requestOptions)
+            .map((user) => {
                 // login successful if there's a jwt token in the response
-                let user = response.json();
                 if (user && user.tokenAuth) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     this.credentialsService.userData = user;

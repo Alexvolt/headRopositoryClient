@@ -1,60 +1,45 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+//import { RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { User } from '../core/index';
 import { CredentialsService } from './authentication/credentials.service'
+import { HttpService } from "./http.service";
 
 
 @Injectable()
 export class UserService{
     constructor(
-        private http: Http,
+        private http: HttpService,
         private credentialsService: CredentialsService) { 
     }
 
-    getAll(params?: any) {
-        let eddUrl = '';
-        if(params){
-            let paramArr = [];
-            for (var key in params)
-                paramArr.push(`${key}=${params[key]}`);
-            eddUrl = paramArr.length
-                ?`?${paramArr.join('&')}`
-                :'';
-        }
-        
-        return this.http.get(environment.apiUrl + '/users' + eddUrl, this.jwt()).map((response: Response) => response.json());
+    getAll(
+        params?: string | URLSearchParams | {
+            [key: string]: any | any[];
+            } | null) {
+        return this.http.get(environment.apiUrl + '/users', params ? {params: params} : undefined );
+         
     }
 
     getById(id: number) {
-        return this.http.get(environment.apiUrl + '/users/' + id, this.jwt()).map((response: Response) => response.json());
+        return this.http.get(environment.apiUrl + '/users/' + id);
     }
 
     current() {
-        return this.http.get(environment.apiUrl + '/users/current', this.jwt()).map((response: Response) => response.json());
+        return this.http.get(environment.apiUrl + '/users/current');
     }
 
     create(user: User) {
-        return this.http.post(environment.apiUrl + '/users/register', user, this.jwt());
+        return this.http.post(environment.apiUrl + '/users/register', { body: user });
     }
 
     update(user: User) {
-        return this.http.put(environment.apiUrl + '/users/' + user.id, user, this.jwt());
+        return this.http.put(environment.apiUrl + '/users/' + user.id, { body: user });
     }
 
     delete(id: number) {
-        return this.http.delete(environment.apiUrl + '/users/' + id, this.jwt());
-    }
-
-    // private helper methods
-    private jwt() {
-        // create authorization header with jwt token
-        let currentUser = this.credentialsService.userData;
-        if (currentUser && currentUser.tokenAccess) {
-            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.tokenAccess });
-            return new RequestOptions({ headers: headers });
-        }
+        return this.http.delete(environment.apiUrl + '/users/' + id);
     }
 }

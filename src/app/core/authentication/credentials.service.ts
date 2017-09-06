@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {JwtHelper} from './jwt.helper';
+import { JwtHelper } from './jwt.helper';
 import { AlertService } from "../alerts/alert.service";
 
 
@@ -63,4 +63,9 @@ export class CredentialsService{
         localStorage.removeItem('currentUser');    
         this._userData = undefined;    
     }
+
+    setAccessToken(tokenAccess: string) {
+        this._userData.tokenAccess = tokenAccess;
+    }
+
 }

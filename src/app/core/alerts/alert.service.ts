@@ -10,7 +10,6 @@ export class AlertService {
   private keepAfterNavigationChange = false;
 
   constructor(private router: Router,
-    //private state: RouterStateSnapshot,
     public snackBar: MdSnackBar) {
     // clear alert message on route change
     router.events.subscribe(event => {
@@ -61,10 +60,8 @@ export class AlertService {
 
     if(typeof(message) == "object"){
       if(message.status && message.status == 401){
-        this.router.navigate(['/login']);
         return "Для доступа к ресурсу требуется аутентификация";
       }
-        //this.router.navigate(['/login'], { queryParams: { returnUrl: this.state.url }});
 
     if(message._body ){
         let messageBody = message._body;

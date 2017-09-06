@@ -24,6 +24,7 @@ import {
 import { HomeComponent } from './home/index';
 import { NavItemsService } from './main-form/nav-items.service';
 import { routing } from './app.routing';
+import { HttpService } from "./core/http.service";
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { routing } from './app.routing';
     AlertService,
     AuthenticationService,
     CredentialsService,
+    HttpService,
     NavItemsService,
     UserService
   ],
