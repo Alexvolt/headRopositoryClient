@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { JwtHelper } from './jwt.helper';
 import { AlertService } from "../alerts/alert.service";
+//import moment from 'moment';
 
 
 @Injectable()
@@ -14,8 +15,9 @@ export class CredentialsService{
         return this._userData; 
     }
     set userData(userWithToken: any) {
-        this._userData = userWithToken; 
-        localStorage.setItem('currentUser', JSON.stringify(userWithToken)); }
+        this._userData = userWithToken;
+        this._userData.expDate = this.calcExpDate(); 
+        this.save();}
 
     get currentUserId(): number {
         let userData = this.userData;
@@ -23,7 +25,7 @@ export class CredentialsService{
             return userData.id;
         return -1;
     }
-        
+
     constructor(private alertService: AlertService) { 
     }
 
@@ -66,6 +68,27 @@ export class CredentialsService{
 
     setAccessToken(tokenAccess: string) {
         this._userData.tokenAccess = tokenAccess;
+        this._userData.expDate = this.calcExpDate();
+        this.save();
     }
 
+    private save(){
+        localStorage.setItem('currentUser', JSON.stringify(this._userData)); 
+    }
+
+    private calcExpDate() {
+        let userData = this.userData;
+        try {
+            let jwtHelper = new JwtHelper();
+            let decodedToken = jwtHelper.decodeToken(userData.tokenAccess);    
+            let dateDiffSeconds = decodedToken.exp - decodedToken.iat;
+            let expDate = new Date(Date.parse(new Date().toString())+(dateDiffSeconds - 7)*1000);
+            console.log(expDate);
+            return expDate;
+        } catch (error) {
+            this.alertService.error(error);
+        }
+        return null;
+    }
+    
 }
