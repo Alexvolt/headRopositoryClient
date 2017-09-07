@@ -13,95 +13,112 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class HttpService {
 
-  activeRequestCount:number = 0;
+  activeRequestCount: number = 0;
 
   constructor(
     private router: Router,
     private http: Http,
     private credentialsService: CredentialsService
-  ) {}
+  ) { }
+
+  httpRequest(url: string, options: RequestOptionsArgs): Observable<any> {
+    this.activeRequestCount++;
+    return this.basicHttpRequest(url, options, false).finally(() => { this.activeRequestCount--; });
+  }
 
   get(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
     options = this.getOptions(RequestMethod.Get, options);
-    return this.httpRequest(url, options, false);
+    return this.httpRequest(url, options);
   }
 
   post(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
     options = this.getOptions(RequestMethod.Post, options);
-    return this.httpRequest(url, options, false);
+    return this.httpRequest(url, options);
   }
 
   put(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
     options = this.getOptions(RequestMethod.Put, options);
-    return this.httpRequest(url, options, false);
+    return this.httpRequest(url, options);
   }
 
   delete(url: string, options?: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
     options = this.getOptions(RequestMethod.Delete, options);
-    return this.httpRequest(url, options, false);
+    return this.httpRequest(url, options);
   }
 
-  private getOptions(method: RequestMethod, options?: RequestOptionsArgs): RequestOptionsArgs{
-    if(!options){
+  private basicHttpRequest(url: string, options: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
+    if (!isRetry){ 
+      let curTime = new Date(), tokenExpDateTime = this.credentialsService.userData.expDateTime;
+      if(tokenExpDateTime && tokenExpDateTime > curTime){ 
+        console.log('Need to recive new token, current exp date ');
+        return this.recieveNewTokenAndMakeOriginalRequest(url, options);
+      }
+    }
+
+    // try to make request. If err-status == 401, try recieve a new token; if yes - repeat a request
+    options.headers = this.getHeaders();
+    return this.http.request(url, options)
+      .map(response => {
+        // ok response - return data in json
+        return this.extractData(response);
+      })
+      .catch(error => {
+        if (!isRetry && error.status == 401) {
+          // try recieve a new token; if yes - repeat a request
+          return this.recieveNewTokenAndMakeOriginalRequest(url, options);
+        } else
+          return Observable.throw(error);
+      });
+  }
+
+  private recieveNewTokenAndMakeOriginalRequest(url: string, options: RequestOptionsArgs) {
+    return this.accessTokenRequest()
+      .switchMap((response: Response) => {
+        // update token
+        let tokenAccess = response.json().tokenAccess
+        console.log(`update token`);//console.log(`update token: ${tokenAccess}`);
+        this.credentialsService.setAccessToken(tokenAccess);
+        // repeat an original request
+        return this.basicHttpRequest(url, options, true);
+      })
+      .catch(error => {
+        if (error.status == 401) {
+          // cant to recive new AccessToken. Need to logout - and then need to login again
+          this.router.navigate(['/login']);
+        }
+        return Observable.throw(error);
+      })
+  }
+
+  private accessTokenRequest(): Observable<Response> {
+    return this.http.post(environment.apiUrl + '/users/accessToken', { tokenAuth: this.credentialsService.userData.tokenAuth });
+  }
+
+  private getOptions(method: RequestMethod, options?: RequestOptionsArgs): RequestOptionsArgs {
+    if (!options) {
       options = { method: method };
     }
-    if(options.method != method)
+    if (options.method != method)
       options.method = method;
     return options;
   }
 
-  private httpRequest(url: string, options: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
-    if (!isRetry) 
-      this.activeRequestCount++;
-    
-    options.headers = this.getHeaders();
-    return this.http.request(url, options)
-      .map(response => {
-        return this.extractData(response);
-      })
-      .catch(error => {
-        if (!isRetry && error.status == 401) 
-          // try recieve a new token; if yes - repeat a request
-          return this.http.post(environment.apiUrl + '/users/accessToken', { tokenAuth: this.credentialsService.userData.tokenAuth })
-            .switchMap((response: Response) => {
-              // update token
-              let tokenAccess = response.json().tokenAccess
-              console.log(`update token`);//console.log(`update token: ${tokenAccess}`);
-              this.credentialsService.setAccessToken(tokenAccess);
-              // repeat an original request
-              return this.httpRequest(url, options, true);
-            })
-            .catch(error => {
-              if(error.status == 401) {
-                // cant to recive new AccessToken. Need to logout - and then need to login again
-                this.router.navigate(['/login']);
-              }
-              return Observable.throw(error);  
-            })
-        else 
-          return Observable.throw(error);  
-        
-      })
-      .finally(() => {this.activeRequestCount--;});
-  }
-
-
   private getHeaders() {
     let currentUser = this.credentialsService.userData;
-      if (currentUser && currentUser.tokenAccess) {
-          return  new Headers({ 'Authorization': 'Bearer ' + currentUser.tokenAccess });
-      }
+    if (currentUser && currentUser.tokenAccess) {
+      return new Headers({ 'Authorization': 'Bearer ' + currentUser.tokenAccess });
+    }
     return null;
   }
 
   private extractData(res: Response) {
     let body;
-    if (res.text()) 
+    if (res.text())
       try {
-          body = res.json();;
+        body = res.json();;
       }
-      catch(err){};
-      
+      catch (err) { };
+
     return body || {};//empty object if put or delete
   }
 

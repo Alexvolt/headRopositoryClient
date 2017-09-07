@@ -16,7 +16,7 @@ export class CredentialsService{
     }
     set userData(userWithToken: any) {
         this._userData = userWithToken;
-        this._userData.expDate = this.calcExpDate(); 
+        this._userData.expDateTime = this.calcExpDateTime(); 
         this.save();}
 
     get currentUserId(): number {
@@ -68,7 +68,7 @@ export class CredentialsService{
 
     setAccessToken(tokenAccess: string) {
         this._userData.tokenAccess = tokenAccess;
-        this._userData.expDate = this.calcExpDate();
+        this._userData.expDateTime = this.calcExpDateTime();
         this.save();
     }
 
@@ -76,15 +76,14 @@ export class CredentialsService{
         localStorage.setItem('currentUser', JSON.stringify(this._userData)); 
     }
 
-    private calcExpDate() {
+    private calcExpDateTime() {
         let userData = this.userData;
         try {
             let jwtHelper = new JwtHelper();
             let decodedToken = jwtHelper.decodeToken(userData.tokenAccess);    
             let dateDiffSeconds = decodedToken.exp - decodedToken.iat;
-            let expDate = new Date(Date.parse(new Date().toString())+(dateDiffSeconds - 7)*1000);
-            console.log(expDate);
-            return expDate;
+            let expDateTime = new Date(Date.parse(new Date().toString())+(dateDiffSeconds - 7)*1000);
+            return expDateTime;
         } catch (error) {
             this.alertService.error(error);
         }
