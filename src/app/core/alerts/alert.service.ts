@@ -23,14 +23,14 @@ export class AlertService {
 
           this.snackBar.dismiss();
         }
-      } 
+      }
     });
   }
 
   clearAlert() {
     //console.log('clearAlert');
     this.snackBar.dismiss();
-    
+
     // clear alert
     //this.subject.next();
   }
@@ -54,38 +54,40 @@ export class AlertService {
     //this.subject.next({ type: 'error', text: message });
   }
 
-  private getErrorMessageFromObject(message: any){
-    if (typeof(message) == "string")
+  private getErrorMessageFromObject(message: any) {
+    if (typeof (message) == "string")
       return message;
 
-    if(typeof(message) == "object"){
-      if(message.status && message.status == 401){
+    if (typeof (message) == "object") {
+      if (message.status && message.status == 401) {
         return "Для доступа к ресурсу требуется аутентификация";
       }
 
-    if(message._body ){
+      //if(message.statusText)
+
+
+      if (message._body) {
         let messageBody = message._body;
         let bodyObject = undefined;
-        try{
+        try {
           bodyObject = JSON.parse(messageBody);
         }
-        catch(err){};
-        if (typeof(bodyObject) == "object")
-          {
-           if(bodyObject.isError){
-             let mText = bodyObject.message;
-             if(bodyObject.code)
-               mText = mText + `, code: ${bodyObject.code}`;
-             mText = mText + `, http code: ${message.status}`
-             return mText;
-           }
-               
+        catch (err) { };
+        if (typeof (bodyObject) == "object") {
+          if (bodyObject.isError) {
+            let mText = bodyObject.message;
+            if (bodyObject.code)
+              mText = mText + `, code: ${bodyObject.code}`;
+            mText = mText + `, http code: ${message.status}`
+            return mText;
           }
-        if(message.ok != undefined && !message.ok)
+
+        }
+        if (message.ok != undefined && !message.ok)
           return `http ошибка с кодом ${message.status}`;
       }
-      }
-    
+    }
+
     // for all other
     return message.toString();
   }

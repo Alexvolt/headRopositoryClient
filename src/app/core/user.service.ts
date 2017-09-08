@@ -35,6 +35,14 @@ export class UserService{
         return this.http.post(environment.apiUrl + '/users/register', { body: user });
     }
 
+    updatePasswordCurrentUser(oldPassword: string, password: string) {
+        return this.http.put(environment.apiUrl + '/users/updatePassword/currentUser', { body: {oldPassword: oldPassword, password: password}});
+    }
+
+    updatePassword(userId: number, password: string) {
+        return this.http.put(environment.apiUrl + '/users/updatePassword/' + userId.toString(), { body: {password: password}});
+    }
+
     update(user: User) {
         return this.http.put(environment.apiUrl + '/users/' + user.id, { body: user });
     }
