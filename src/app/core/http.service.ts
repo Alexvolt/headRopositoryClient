@@ -47,11 +47,11 @@ export class HttpService {
   }
 
   private basicHttpRequest(url: string, options: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
-    let userData = this.credentialsService.userData;
-    if (!isRetry && userData){ 
-      let curTime = new Date(), tokenExpDateTime = userData.expDateTime;
-      if(tokenExpDateTime && tokenExpDateTime > curTime){ 
-        console.log('Need to recive new token, current exp date ');
+    if (!isRetry){ 
+      let curTime = new Date(), tokenExpDateTime = this.credentialsService.tokenAccessExpDateTime;
+      //console.log(`curTime = ${curTime}, tokenExpDateTime = ${tokenExpDateTime}, this.credentialsService.userData.expDateTime = ${this.credentialsService.userData.expDateTime}`);
+      if(curTime >= tokenExpDateTime ){ 
+        //console.log('Need to recive new token, current exp date ');
         return this.recieveNewTokenAndMakeOriginalRequest(url, options);
       }
     }
@@ -77,7 +77,7 @@ export class HttpService {
       .switchMap((response: Response) => {
         // update token
         let tokenAccess = response.json().tokenAccess
-        console.log(`update token`);//console.log(`update token: ${tokenAccess}`);
+        //console.log(`update token`);//console.log(`update token: ${tokenAccess}`);
         this.credentialsService.setAccessToken(tokenAccess);
         // repeat an original request
         return this.basicHttpRequest(url, options, true);

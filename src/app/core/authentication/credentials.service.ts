@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { JwtHelper } from './jwt.helper';
 import { AlertService } from "../alerts/alert.service";
 
+ 
 
 @Injectable()
 export class CredentialsService{
+    test = new Date();
 
     private _userData: any;
     private _decodedTokenAccess: any;
+    private _tokenAccessExpDateTime: Date;
     get userData(): any { 
         if(!this._userData)
             this._userData = JSON.parse(localStorage.getItem('currentUser'));
@@ -20,7 +23,12 @@ export class CredentialsService{
         this.save();
     }
 
-    constructor(private alertService: AlertService) { 
+    get tokenAccessExpDateTime(){
+        return this._tokenAccessExpDateTime;
+    }
+
+    constructor(private alertService: AlertService) {
+        this._tokenAccessExpDateTime = new Date();
     }
 
     loggedIn(){
@@ -70,7 +78,7 @@ export class CredentialsService{
         if(userData){
         let jwtHelper = new JwtHelper();
         try {
-            this._decodedTokenAccess = jwtHelper.decodeToken(userData.tokenAccess);    
+            this._decodedTokenAccess = jwtHelper.decodeToken(userData.tokenAccess);
         } catch (error) {
             this.alertService.error(error);
             this.remove();
@@ -80,7 +88,7 @@ export class CredentialsService{
     }
 
     private onTokenAccessChange() {
-        this._userData.expDateTime = this.calcExpDateTime();
+        this._tokenAccessExpDateTime = this.calcExpDateTime();
         this._decodedTokenAccess = null;
     }
     
@@ -94,7 +102,7 @@ export class CredentialsService{
             let jwtHelper = new JwtHelper();
             let decodedToken = jwtHelper.decodeToken(userData.tokenAccess);    
             let dateDiffSeconds = decodedToken.exp - decodedToken.iat;
-            let expDateTime = new Date(Date.parse(new Date().toString())+(dateDiffSeconds - 7)*1000);
+            let expDateTime = new Date(Date.parse(new Date().toString())+(dateDiffSeconds - 5)*1000);
             return expDateTime;
         } catch (error) {
             this.alertService.error(error);
