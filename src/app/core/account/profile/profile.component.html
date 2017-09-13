@@ -29,7 +29,7 @@
                         <md-input-container class="default-input-field">
                             <input mdInput [minlength]="config.usernameMinLength" placeholder="Логин" name="username" [disabled]="readOnly" [(ngModel)]="model.username"
                                 #username="ngModel" required>
-                            <md-hint align="start" *ngIf="username.value && username.value.length < config.usernameMinLength">{{username.value.length}} символов / минимум {{config.usernameMinLength}}</md-hint>
+                            <av-hint [value]="username.value" [minlength]="config.usernameMinLength"></av-hint> 
                         </md-input-container>
                     </div>
                     <div *ngIf="isAdmin">
@@ -59,17 +59,17 @@
                     <md-input-container *ngIf="isCurrentUserProfile" class="default-input-field">
                         <input mdInput type="password" name="oldPassword" [minlength]="config.passwordMinLength" placeholder="Старый пароль" [(ngModel)]="passwordData.oldPassword"
                             #oldPassword required>
-                        <md-hint align="start" *ngIf="oldPassword.value && oldPassword.value.length < config.passwordMinLength">{{oldPassword.value.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
+                        <av-hint [value]="oldPassword.value" [minlength]="config.passwordMinLength"></av-hint> 
                     </md-input-container>
                     <md-input-container class="default-input-field">
                         <input mdInput type="password" name="password" [minlength]="config.passwordMinLength" placeholder="Новый пароль" [(ngModel)]="passwordData.password"
                             #password required>
-                        <md-hint align="start" *ngIf="password.value && password.value.length < config.passwordMinLength">{{password.value.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
+                        <av-hint [value]="password.value" [minlength]="config.passwordMinLength"></av-hint> 
                     </md-input-container>
                     <md-input-container class="default-input-field">
                         <input mdInput type="password" name="confirmPassword" [minlength]="config.passwordMinLength" placeholder="Повторить новый пароль"
                             [(ngModel)]="passwordData.confirmPassword" #confirmPassword required>
-                        <md-hint align="start" *ngIf="confirmPassword.value && confirmPassword.value.length < config.passwordMinLength">{{confirmPassword.value.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
+                        <av-hint [value]="confirmPassword.value" [minlength]="config.passwordMinLength"></av-hint> 
                     </md-input-container>
                     <button md-fab type="submit" [disabled]="loadingP"><md-icon>check</md-icon></button>
                     <img *ngIf="loadingP" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="

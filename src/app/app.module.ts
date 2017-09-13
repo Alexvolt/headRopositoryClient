@@ -25,11 +25,13 @@ import { HomeComponent } from './home/index';
 import { NavItemsService } from './main-form/nav-items.service';
 import { routing } from './app.routing';
 import { HttpService } from "./core/http.service";
+import { InputValidateHintComponent } from "./core/components/av-hint.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    InputValidateHintComponent,
     LoginComponent,
     RegisterComponent,
     AdminPanelComponent,

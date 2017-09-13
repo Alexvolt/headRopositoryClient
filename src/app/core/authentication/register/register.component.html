@@ -19,13 +19,13 @@
         <div>
             <md-input-container class="default-input-field">
                 <input mdInput [minlength]="config.usernameMinLength" placeholder="Логин" name="username" [(ngModel)]="model.username" #username="ngModel" required>
-                <md-hint align="start" *ngIf="username.value && username.value.length < config.usernameMinLength">{{username.value.length}} символов / минимум {{config.usernameMinLength}}</md-hint>  
+                 <av-hint [value]="username.value" [minlength]="config.usernameMinLength"></av-hint> 
             </md-input-container>
         </div>
         <div>
             <md-input-container class="default-input-field">
                 <input mdInput type="password" [minlength]="config.passwordMinLength" placeholder="Пароль" name="password" [(ngModel)]="model.password" #password="ngModel" required>
-                <md-hint align="start" *ngIf="password.value && password.value.length < config.passwordMinLength">{{password.value.length}} символов / минимум {{config.passwordMinLength}}</md-hint> 
+                <av-hint [value]="password.value" [minlength]="config.passwordMinLength"></av-hint> 
             </md-input-container>
         </div>
         <div class="form-group">
