@@ -30,9 +30,9 @@ export class ProfileComponent implements OnInit {
   is404 = false;
   isAdmin = false;
   readOnly = true;
-  password: PasswordDataForChange;
+  passwordData: PasswordDataForChange;
+  isCurrentUserProfile = true;
   passwordMessage: string;
-  confirmPassword1:string; 
   private goBackAfterSaving = false;
 
   
@@ -44,7 +44,7 @@ export class ProfileComponent implements OnInit {
     private credentialsService: CredentialsService,
     private config: AppConfig,
   ) { 
-    this.password = new PasswordDataForChange();
+    this.passwordData = new PasswordDataForChange();
   }
   
   ngOnInit() {
@@ -66,7 +66,10 @@ export class ProfileComponent implements OnInit {
         }
       })
       .subscribe(
-        user => this.model = user,
+        user => {
+          this.model = user;
+          this.isCurrentUserProfile = (user.id == this.credentialsService.currentUserId());
+        },
         error => {
           if(error.status == 404)
             this.is404 = true;
@@ -92,16 +95,16 @@ export class ProfileComponent implements OnInit {
   }
 
   comparePasswords(): boolean {
-    if (this.password.oldPassword 
-      && this.password.password 
-      && this.password.oldPassword == this.password.password){
+    if (this.passwordData.oldPassword 
+      && this.passwordData.password 
+      && this.passwordData.oldPassword == this.passwordData.password){
 
       this.passwordMessage = 'Старый и новый пароль не должны совпадать';
       return false;
     }
-    else if (this.password.confirmPassword 
-      && this.password.password 
-      && this.password.confirmPassword != this.password.password) {
+    else if (this.passwordData.confirmPassword 
+      && this.passwordData.password 
+      && this.passwordData.confirmPassword != this.passwordData.password) {
       
       this.passwordMessage = 'Пароль и подтверждение не совпадают';
       return false;
@@ -113,17 +116,25 @@ export class ProfileComponent implements OnInit {
   }
 
   savePassword(): void {
-    if(!this.comparePasswords())
+    if(!this.comparePasswords()){
+      this.alertService.error(this.passwordMessage);
       return;
-    let userId = this.model.id, currentUserId = this.credentialsService.currentUserId();
-
-    let updateObs = userId == currentUserId 
-    ? this.userService.updatePasswordCurrentUser(this.password.oldPassword, this.password.password) // currentUser password editing
-    : this.userService.updatePassword(userId, this.password.password) // need admin rights to update another user
-    
+    }
+    let userId = this.model.id;
+    let updateObs = this.isCurrentUserProfile 
+    ? this.userService.updatePasswordCurrentUser(this.passwordData.oldPassword, this.passwordData.password) // currentUser password editing
+    : this.userService.updatePassword(userId, this.passwordData.password) // need admin rights to update another user
+  
+    this.loadingP = true;
     updateObs.subscribe(
-        () => this.alertService.success('Данные успешно обновлены'),
-        error => this.alertService.error(error)); 
+        () => {
+          this.alertService.success('Данные успешно обновлены');
+          this.loadingP = false;
+        },
+        error => {
+          this.alertService.error(error); 
+          this.loadingP = false;
+        });
     
   }
 

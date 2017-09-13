@@ -52,29 +52,30 @@
             </div>
         </md-tab>
         <md-tab *ngIf="!readOnly" label="Смена пароля">
-                <div  class="child-form">
-                    <h3>Введите старый/новый пароль</h3>
-                    <md-input-container class="default-input-field">
-                        <input mdInput type="password"  [minlength]="config.passwordMinLength" placeholder="Старый пароль" id="oldPassword" [(ngModel)]="password.oldPassword"
-                            #password="ngModel" required>
-                        <md-hint align="start" *ngIf="password.oldPassword && password.oldPassword.length < config.passwordMinLength">{{password.oldPassword.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
+            <div class="child-form">
+                <form name="formPasswordChange" (ngSubmit)="formPasswordChange.form.valid? savePassword() : return;" #formPasswordChange="ngForm"
+                    novalidate>
+                    <h3>Введите пароль</h3>
+                    <md-input-container *ngIf="isCurrentUserProfile" class="default-input-field">
+                        <input mdInput type="password" name="oldPassword" [minlength]="config.passwordMinLength" placeholder="Старый пароль" [(ngModel)]="passwordData.oldPassword"
+                            #oldPassword required>
+                        <md-hint align="start" *ngIf="oldPassword.value && oldPassword.value.length < config.passwordMinLength">{{oldPassword.value.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
                     </md-input-container>
                     <md-input-container class="default-input-field">
-                        <input mdInput type="password" [minlength]="config.passwordMinLength" placeholder="Новый пароль" id="password" [(ngModel)]="password.password"
-                            #password="ngModel" required>
-                        <md-hint align="start" *ngIf="password.password && password.password.length < config.passwordMinLength">{{password.password.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
+                        <input mdInput type="password" name="password" [minlength]="config.passwordMinLength" placeholder="Новый пароль" [(ngModel)]="passwordData.password"
+                            #password required>
+                        <md-hint align="start" *ngIf="password.value && password.value.length < config.passwordMinLength">{{password.value.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
                     </md-input-container>
                     <md-input-container class="default-input-field">
-                        <input mdInput type="password"  [minlength]="config.passwordMinLength" placeholder="Повторить новый пароль" id="confirmPassword"   [(ngModel)]="password.confirmPassword" #password="ngModel" required>
-                        <md-hint align="start" *ngIf="password.confirmPassword && password.confirmPassword.length < config.passwordMinLength">{{password.confirmPassword.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
+                        <input mdInput type="password" name="confirmPassword" [minlength]="config.passwordMinLength" placeholder="Повторить новый пароль"
+                            [(ngModel)]="passwordData.confirmPassword" #confirmPassword required>
+                        <md-hint align="start" *ngIf="confirmPassword.value && confirmPassword.value.length < config.passwordMinLength">{{confirmPassword.value.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
                     </md-input-container>
-                    <md-input-container class="default-input-field">
-                        <input mdInput type="password" [minlength]="config.passwordMinLength" placeholder="Повторить новый пароль" id="confirmPassword1"   [(ngModel)]="confirmPassword" #password1="ngModel" required>
-                        <md-hint align="start" *ngIf="confirmPassword1 && confirmPassword1.length < config.passwordMinLength">{{confirmPassword1.length}} символов / минимум {{config.passwordMinLength}}</md-hint>
-                    </md-input-container>
-                    <button md-fab type="submit" [disabled]="loadingP"><md-icon>check</md-icon></button>
-                    <img *ngIf="loadingP" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
-                </div>
+                    <button md-fab [disabled]="loadingP"><md-icon>check</md-icon></button>
+                    <img *ngIf="loadingP" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                    />
+                </form>
+            </div>
         </md-tab>
     </md-tab-group>
 </div>
