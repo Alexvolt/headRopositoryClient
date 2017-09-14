@@ -5,7 +5,8 @@ import {
 import 'rxjs/add/operator/delay';
 
 import { NavItemsService } from './main-form/nav-items.service';
-import { AuthenticationService, AlertService } from './core/index';
+import { AuthenticationService } from "./core/authentication/authentication.service";
+import { AlertService } from "./core/alerts/alert.service";
 
 
 /**

@@ -10,22 +10,20 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
-import { 
-  AdminPanelComponent,
-  AlertService, 
-  AuthGuard,
-  AuthenticationService,
-  UserService,
-  ProfileComponent,
-  CredentialsService,
-  LoginComponent, 
-  RegisterComponent 
-} from './core/index';
 import { HomeComponent } from './home/index';
 import { NavItemsService } from './main-form/nav-items.service';
 import { routing } from './app.routing';
 import { HttpService } from "./core/http.service";
 import { InputValidateHintComponent } from "./core/components/av-hint.component";
+import { LoginComponent } from "./core/authentication/login/login.component";
+import { RegisterComponent } from "./core/authentication/register/register.component";
+import { AdminPanelComponent } from "./core/admin/admin-panel/admin-panel.component";
+import { ProfileComponent } from "./core/account/profile/profile.component";
+import { AuthGuard } from "./core/guards/auth.guard";
+import { AlertService } from "./core/alerts/alert.service";
+import { AuthenticationService } from "./core/authentication/authentication.service";
+import { CredentialsService } from "./core/authentication/credentials.service";
+import { UserService } from "./core/user.service";
 
 @NgModule({
   declarations: [

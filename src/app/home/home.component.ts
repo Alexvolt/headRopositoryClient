@@ -1,13 +1,14 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
-import { User } from '../core/index';
-import { AlertService, UserService } from '../core/index';
 import { CredentialsService } from '../core/authentication/credentials.service'
 
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
+import { User } from "../core/user";
+import { UserService } from "../core/user.service";
+import { AlertService } from "../core/alerts/alert.service";
 
 
 @Component({

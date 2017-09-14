@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router }            from '@angular/router';
-
-import { AlertService, UserService } from '../../index';
-import { User } from '../../index';
+import { User } from "../../user";
+import { UserService } from "../../user.service";
+import { AlertService } from "../../alerts";
 
 @Component({
   selector: 'app-admin-panel',

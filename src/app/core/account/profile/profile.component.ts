@@ -3,9 +3,11 @@ import { ActivatedRoute, Router, ParamMap }   from '@angular/router';
 import { Location }                 from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 
-import { AlertService, UserService, User } from '../../index';
 import { CredentialsService } from '../../authentication/credentials.service';
 import { AppConfig } from '../../../app.config';
+import { UserService } from "../../user.service";
+import { AlertService } from "../../alerts/index";
+import { User } from "../../user";
 
 class PasswordDataForChange {
   oldPassword: string;

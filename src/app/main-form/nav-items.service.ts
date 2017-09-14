@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
-import { AuthenticationService, CredentialsService } from '../core/authentication/index';
-
+import { CredentialsService } from "../core/authentication/credentials.service";
 
 @Injectable()
 export class NavItemsService {
