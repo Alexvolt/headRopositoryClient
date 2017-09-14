@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {
-  //MdAutocompleteModule,
+  MdAutocompleteModule,
   MdButtonModule,
   //MdButtonToggleModule,
   //MdCardModule,
@@ -41,7 +41,7 @@ import {
  */
 @NgModule({
   exports: [
-    //MdAutocompleteModule,
+    MdAutocompleteModule,
     MdButtonModule,
     //MdButtonToggleModule,
     //MdCardModule,

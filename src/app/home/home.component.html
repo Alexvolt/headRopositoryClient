@@ -4,9 +4,27 @@
     <h3>Текущие пользователи:</h3>
     <ul>
         <li *ngFor="let user of users">
-            {{user.username}} ({{user.firstName}} {{user.lastName}}) {{user.email}}) {{user.haveAccess}})
-            - <a (click)="deleteUser(user.id)">Delete</a>
+            {{user.username}} ({{user.firstName}} {{user.lastName}}) {{user.email}}) {{user.haveAccess}}) - <a (click)="deleteUser(user.id)">Delete</a>
         </li>
     </ul>
     <p><a [routerLink]="['/login']">Logout</a></p>
+    <md-select  class="default-input-field" multiple placeholder="Favorite food" [(ngModel)]="selectedValue" name="food" #select="mdSelect">
+        <md-option *ngFor="let food of foods" [value]="food.value">
+            {{food.viewValue}}
+        </md-option>
+    </md-select>
+    <p>{{selectedValue}}</p>
+    <p>{{typeofSelected()}}</p>
+
+     <input mdInput placeholder="State" aria-label="State" [mdAutocomplete]="auto"> 
+    <!-- <input mdInput #searchBox placeholder="State" aria-label="State" [mdAutocomplete]="auto" [formControl]="stateCtrl"> -->
+    <md-autocomplete #auto="mdAutocomplete">
+      <md-option *ngFor="let state of filteredStates | async" [value]="state.name">
+         <img style="vertical-align:middle;" aria-hidden src="{{state.flag}}" height="25" /> 
+        <span>{{ state.name }}</span> |
+        <small>Population: {{state.population}}</small>
+      </md-option>
+    </md-autocomplete>
+    
+    
 </div>

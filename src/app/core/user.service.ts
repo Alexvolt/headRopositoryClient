@@ -4,15 +4,13 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { User } from '../core/index';
-import { CredentialsService } from './authentication/credentials.service'
 import { HttpService } from "./http.service";
 
 
 @Injectable()
 export class UserService{
     constructor(
-        private http: HttpService,
-        private credentialsService: CredentialsService) { 
+        private http: HttpService) { 
     }
 
     getAll(

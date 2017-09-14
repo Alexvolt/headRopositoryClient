@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { HttpService } from "../../core/http.service";
 
 @Injectable()
 export class ProfessionalAreasService {
 
-  constructor() { }
+  constructor(private http: HttpService) { }
 
 }
