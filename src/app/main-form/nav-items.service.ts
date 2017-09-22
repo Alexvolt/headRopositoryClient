@@ -15,6 +15,7 @@ export class NavItemsService {
         {name: 'Выйти', route: '/login'},
         {name: 'Профиль', route: '/profile'},
         {name: 'Администрирование', route: '/admin'},
+        {name: 'Проф. области', route: '/professional-areas'},
      ];
     else
       navItemsAuth = [

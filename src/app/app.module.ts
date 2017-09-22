@@ -24,6 +24,9 @@ import { AlertService } from "./core/alerts/alert.service";
 import { AuthenticationService } from "./core/authentication/authentication.service";
 import { CredentialsService } from "./core/authentication/credentials.service";
 import { UserService } from "./core/user.service";
+import { BasicDataService } from "./resume/shared/basic-data.service";
+import { ProfessionalAreasService } from "./resume/shared/professional-areas.service";
+import { ProfessionalAreasComponent } from './resume/shared/professional-areas/professional-areas.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,8 @@ import { UserService } from "./core/user.service";
     LoginComponent,
     RegisterComponent,
     AdminPanelComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProfessionalAreasComponent
   ],
   imports: [
     BrowserModule,
@@ -49,10 +53,12 @@ import { UserService } from "./core/user.service";
     AuthGuard,
     AlertService,
     AuthenticationService,
+    BasicDataService,
     CredentialsService,
     HttpService,
     NavItemsService,
-    UserService
+    ProfessionalAreasService,
+    UserService,
   ],
   bootstrap: [AppComponent]
 })

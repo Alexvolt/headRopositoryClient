@@ -6,6 +6,7 @@ import { AuthGuard } from "./core/guards/auth.guard";
 import { RegisterComponent } from "./core/authentication/register/register.component";
 import { ProfileComponent } from "./core/account/profile/profile.component";
 import { LoginComponent } from "./core/authentication/login/login.component";
+import { ProfessionalAreasComponent } from "./resume/shared/professional-areas/professional-areas.component";
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -14,6 +15,7 @@ const appRoutes: Routes = [
     { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard]  },
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]  },
     { path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard]  },
+    { path: 'professional-areas', component: ProfessionalAreasComponent, canActivate: [AuthGuard]  },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
