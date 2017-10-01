@@ -103,7 +103,8 @@ export class CredentialsService{
             let jwtHelper = new JwtHelper();
             let decodedToken = jwtHelper.decodeToken(userData.AccessToken);   
             let expDate = decodedToken.nbf ? decodedToken.nbf : decodedToken.iat;   
-            let dateDiffSeconds = decodedToken.exp - decodedToken.iat;
+            let dateDiffSeconds = decodedToken.exp - expDate;
+            console.log(`token exp in ${dateDiffSeconds} seconds`);
             let expDateTime = new Date(Date.parse(new Date().toString())+(dateDiffSeconds - 5)*1000);
             return expDateTime;
         } catch (error) {

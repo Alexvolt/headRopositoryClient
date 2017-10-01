@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://укажиАдресАпиЧертПобери:4000'
+  apiUrl: 'http://укажиАдресАпиЧертПобери:5000'
 };

@@ -57,7 +57,9 @@ export class HttpService {
     }
 
     // try to make request. If err-status == 401, try recieve a new token; if yes - repeat a request
-    options.headers = this.getHeaders();
+    let myHeaders = this.getHeaders();
+    if (myHeaders)
+        options.headers = myHeaders;
     return this.http.request(url, options)
       .map(response => {
         // ok response - return data in json

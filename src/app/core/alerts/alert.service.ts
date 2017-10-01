@@ -80,8 +80,10 @@ export class AlertService {
               mText = mText + `, code: ${bodyObject.code}`;
             mText = mText + `, http code: ${message.status}`
             return mText;
-          }
-
+          }        
+        } else {
+            if(typeof (messageBody) == "string")
+                return messageBody + `, http code: ${message.status}`;
         }
         if (message.ok != undefined && !message.ok)
           return `http ошибка с кодом ${message.status}`;
