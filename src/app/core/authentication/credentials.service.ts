@@ -9,9 +9,10 @@ import { AlertService } from "../alerts/alert.service";
 export class CredentialsService{
     test = new Date();
 
+    private readonly roleAttrName = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
     private _userData: any;
-    private _decodedTokenAccess: any;
-    private _tokenAccessExpDateTime: Date;
+    private _decodedAccessToken: any;
+    private _AccessTokenExpDateTime: Date;
     get userData(): any { 
         if(!this._userData)
             this._userData = JSON.parse(localStorage.getItem('currentUser'));
@@ -19,16 +20,16 @@ export class CredentialsService{
     }
     set userData(userWithToken: any) {
         this._userData = userWithToken;
-        this.onTokenAccessChange()
+        this.onAccessTokenChange()
         this.save();
     }
 
-    get tokenAccessExpDateTime(){
-        return this._tokenAccessExpDateTime;
+    get AccessTokenExpDateTime(){
+        return this._AccessTokenExpDateTime;
     }
 
     constructor(private alertService: AlertService) {
-        this._tokenAccessExpDateTime = new Date();
+        this._AccessTokenExpDateTime = new Date();
     }
 
     loggedIn(){
@@ -39,16 +40,16 @@ export class CredentialsService{
     }
 
     isAdmin() {
-        let decodedToken = this.decodedTokenAccess();
-        if(decodedToken && decodedToken.admin)
+        let decodedToken = this.decodedAccessToken();
+        if(decodedToken && decodedToken[this.roleAttrName] == 'Admin')
             return true;
         return false;
     }
 
     currentUserId(): number {
-        let decodedToken = this.decodedTokenAccess();
+        let decodedToken = this.decodedAccessToken();
         if(decodedToken && decodedToken.sub)
-            return decodedToken.sub;
+            return +decodedToken.sub;
         return null;
     }
 
@@ -64,32 +65,32 @@ export class CredentialsService{
         this._userData = undefined;    
     }
 
-    setAccessToken(tokenAccess: string) {
-        this._userData.tokenAccess = tokenAccess;
-        this.onTokenAccessChange();
+    setAccessToken(AccessToken: string) {
+        this._userData.AccessToken = AccessToken;
+        this.onAccessTokenChange();
         this.save();
     }
     
-    private decodedTokenAccess(): any { 
-        if(!this._decodedTokenAccess){
+    private decodedAccessToken(): any { 
+        if(!this._decodedAccessToken){
         }
 
         let userData = this.userData;
         if(userData){
         let jwtHelper = new JwtHelper();
         try {
-            this._decodedTokenAccess = jwtHelper.decodeToken(userData.tokenAccess);
+            this._decodedAccessToken = jwtHelper.decodeToken(userData.AccessToken);
         } catch (error) {
             this.alertService.error(error);
             this.remove();
         }
         }
-        return this._decodedTokenAccess; 
+        return this._decodedAccessToken; 
     }
 
-    private onTokenAccessChange() {
-        this._tokenAccessExpDateTime = this.calcExpDateTime();
-        this._decodedTokenAccess = null;
+    private onAccessTokenChange() {
+        this._AccessTokenExpDateTime = this.calcExpDateTime();
+        this._decodedAccessToken = null;
     }
     
     private save(){
@@ -100,7 +101,8 @@ export class CredentialsService{
         let userData = this.userData;
         try {
             let jwtHelper = new JwtHelper();
-            let decodedToken = jwtHelper.decodeToken(userData.tokenAccess);    
+            let decodedToken = jwtHelper.decodeToken(userData.AccessToken);   
+            let expDate = decodedToken.nbf ? decodedToken.nbf : decodedToken.iat;   
             let dateDiffSeconds = decodedToken.exp - decodedToken.iat;
             let expDateTime = new Date(Date.parse(new Date().toString())+(dateDiffSeconds - 5)*1000);
             return expDateTime;

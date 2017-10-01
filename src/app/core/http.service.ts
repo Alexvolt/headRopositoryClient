@@ -48,7 +48,7 @@ export class HttpService {
 
   private basicHttpRequest(url: string, options: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
     if (!isRetry && this.credentialsService.loggedIn()){ 
-      let curTime = new Date(), tokenExpDateTime = this.credentialsService.tokenAccessExpDateTime;
+      let curTime = new Date(), tokenExpDateTime = this.credentialsService.AccessTokenExpDateTime;
       //console.log(`curTime = ${curTime}, tokenExpDateTime = ${tokenExpDateTime}, this.credentialsService.userData.expDateTime = ${this.credentialsService.userData.expDateTime}`);
       if(curTime >= tokenExpDateTime ){ 
         //console.log('Need to recive new token, current exp date ');
@@ -76,9 +76,9 @@ export class HttpService {
     return this.accessTokenRequest()
       .switchMap((response: Response) => {
         // update token
-        let tokenAccess = response.json().tokenAccess
-        //console.log(`update token`);//console.log(`update token: ${tokenAccess}`);
-        this.credentialsService.setAccessToken(tokenAccess);
+        let AccessToken = response.json().AccessToken
+        //console.log(`update token`);//console.log(`update token: ${AccessToken}`);
+        this.credentialsService.setAccessToken(AccessToken);
         // repeat an original request
         return this.basicHttpRequest(url, options, true);
       })
@@ -92,7 +92,7 @@ export class HttpService {
   }
 
   private accessTokenRequest(): Observable<Response> {
-    return this.http.post(environment.apiUrl + '/users/accessToken', { tokenAuth: this.credentialsService.userData.tokenAuth });
+    return this.http.post(environment.apiUrl + '/users/accessToken', { RefreshToken: this.credentialsService.userData.RefreshToken });
   }
 
   private getOptions(method: RequestMethod, options?: RequestOptionsArgs): RequestOptionsArgs {
@@ -106,8 +106,8 @@ export class HttpService {
 
   private getHeaders() {
     let currentUser = this.credentialsService.userData;
-    if (currentUser && currentUser.tokenAccess) {
-      return new Headers({ 'Authorization': 'Bearer ' + currentUser.tokenAccess });
+    if (currentUser && currentUser.AccessToken) {
+      return new Headers({ 'Authorization': 'Bearer ' + currentUser.AccessToken });
     }
     return null;
   }
