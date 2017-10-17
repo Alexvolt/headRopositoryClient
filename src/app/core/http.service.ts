@@ -48,7 +48,7 @@ export class HttpService {
 
   private basicHttpRequest(url: string, options: RequestOptionsArgs, isRetry?: boolean): Observable<any> {
     if (!isRetry && this.credentialsService.loggedIn()){ 
-      let curTime = new Date(), tokenExpDateTime = this.credentialsService.AccessTokenExpDateTime;
+      let curTime = new Date(), tokenExpDateTime = this.credentialsService.accessTokenExpDateTime;
       //console.log(`curTime = ${curTime}, tokenExpDateTime = ${tokenExpDateTime}, this.credentialsService.userData.expDateTime = ${this.credentialsService.userData.expDateTime}`);
       if(curTime >= tokenExpDateTime ){ 
         //console.log('Need to recive new token, current exp date ');
@@ -78,15 +78,15 @@ export class HttpService {
     return this.accessTokenRequest()
       .switchMap((response: Response) => {
         // update token
-        let AccessToken = response.json().AccessToken
-        //console.log(`update token`);//console.log(`update token: ${AccessToken}`);
-        this.credentialsService.setAccessToken(AccessToken);
+        let accessToken = response.json().accessToken
+        //console.log(`update token`);//console.log(`update token: ${accessToken}`);
+        this.credentialsService.setaccessToken(accessToken);
         // repeat an original request
         return this.basicHttpRequest(url, options, true);
       })
       .catch(error => {
         if (error.status == 401) {
-          // cant to recive new AccessToken. Need to logout - and then need to login again
+          // cant to recive new accessToken. Need to logout - and then need to login again
           this.router.navigate(['/login']);
         }
         return Observable.throw(error);
@@ -94,7 +94,7 @@ export class HttpService {
   }
 
   private accessTokenRequest(): Observable<Response> {
-    return this.http.post(environment.apiUrl + '/users/accessToken', { RefreshToken: this.credentialsService.userData.RefreshToken });
+    return this.http.post(environment.apiUrl + '/users/accessToken', { refreshToken: this.credentialsService.userData.refreshToken });
   }
 
   private getOptions(method: RequestMethod, options?: RequestOptionsArgs): RequestOptionsArgs {
@@ -108,8 +108,8 @@ export class HttpService {
 
   private getHeaders() {
     let currentUser = this.credentialsService.userData;
-    if (currentUser && currentUser.AccessToken) {
-      return new Headers({ 'Authorization': 'Bearer ' + currentUser.AccessToken });
+    if (currentUser && currentUser.accessToken) {
+      return new Headers({ 'Authorization': 'Bearer ' + currentUser.accessToken });
     }
     return null;
   }

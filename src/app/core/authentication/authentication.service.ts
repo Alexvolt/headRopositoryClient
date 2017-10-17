@@ -22,11 +22,11 @@ export class AuthenticationService {
         return this.http.post(environment.apiUrl + '/users/authenticate', requestOptions)
             .map((user) => {
                 // login successful if there's a jwt token in the response
-                if (user && user.RefreshToken) {
+                if (user && user.refreshToken) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     this.credentialsService.userData = user;
                     this.subject.next({ loggedIn: true });
-                }
+                } 
             });
     }
 
